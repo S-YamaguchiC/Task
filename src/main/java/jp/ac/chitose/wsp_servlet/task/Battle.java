@@ -8,30 +8,41 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 @WebServlet("/battle")
 public class Battle extends HttpServlet {
 
+    private static ArrayList<String> resultArray;
+    private CreateRand createRand = new CreateRand();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        makeHtml(resp, session);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        //
-        String bb_len = req.getParameter("bb_len");
-        String bb_wid = req.getParameter("bb_wid");
-        // 二度目の送信でNULLになる件
-        HttpSession session = req.getSession();
-        session.setAttribute("s_len", bb_len);
-        session.setAttribute("s_wid", bb_wid);
-        System.out.println(session.getAttribute("s_len") + " " + session.getAttribute("s_wid"));
 
-        //
+        HttpSession session = req.getSession();
+
+        // RequestParamがnullでないときのみ実行(要は初回のみ)
+        if ( req.getParameter("bb_len")!=null && req.getParameter("bb_wid")!=null ) {
+            String bb_len = req.getParameter("bb_len");
+            String bb_wid = req.getParameter("bb_wid");
+            // 解決
+            session.setAttribute("s_len", bb_len);
+            session.setAttribute("s_wid", bb_wid);
+        }
+        System.out.println(session.getAttribute("s_len") + " , " + session.getAttribute("s_wid"));
+
+        // うごいてるかわからん
+        session.setAttribute("c_len", createRand.getComLen());
+        session.setAttribute("c_wid", createRand.getComWid());
+
+        // html出力
         makeHtml(resp, session);
     }
 
@@ -59,6 +70,7 @@ public class Battle extends HttpServlet {
             out.println("<h5>あなたの陣地</h5>");
             out.println("<table border=\"3\"><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>");
             String BB = "W";
+            String CPU = "C";
             for (int i=0; i<5; i++) {
                 out.println("<tr>");
                 out.println("<th>"+ (i+1) +"</th>");
@@ -82,13 +94,23 @@ public class Battle extends HttpServlet {
                 out.println("<tr>");
                 out.println("<th>"+ (i+1) +"</th>");
                 for (int j=0; j<5; j++) {
-                    //
-                    out.println("<td id="+ String.valueOf(i)+String.valueOf(j) + " align='right' width='20'>" + " " + "</td>");
+                    // CreateRandクラスで出力した座標をテーブルに入れる
+                    if(session.getAttribute("c_len").equals(String.valueOf(i+1))
+                            && session.getAttribute("c_wid").equals(String.valueOf(j+1))) {
+                        out.println("<td id=" + String.valueOf(i) + String.valueOf(j) + " align='right' width='20'>" + CPU + "</td>");
+                    } else {
+                        out.println("<td id=" + String.valueOf(i) + String.valueOf(j) + " align='right' width='20'>" + " " + "</td>");
+                    }
                 }
                 // 内側のループの終了
                 out.println("</tr>");
             }
             out.println("</table><br>");
+            out.println("<p>-----------------------履歴-------------------------</p>");
+//            for(int i=0; i<resultArray.size(); i++) {
+//                //print
+//                out.println("<p>座標：" + resultArray.get(i) + "</p>");
+//            }
             out.println("<a href=\"./register\">対戦の中断</a>");
             out.println("</body></html>");
         }

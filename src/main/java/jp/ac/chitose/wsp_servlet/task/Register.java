@@ -17,7 +17,7 @@ public class Register extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = req.getSession();
         session.invalidate();
-        makeHtml(resp);
+        makeHtml(resp, session);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class Register extends HttpServlet {
         //
     }
 
-    private void makeHtml(HttpServletResponse resp)
+    private void makeHtml(HttpServletResponse resp, HttpSession session)
             throws IOException {
 
         try(PrintWriter out = resp.getWriter() ) {
