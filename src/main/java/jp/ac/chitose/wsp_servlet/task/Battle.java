@@ -39,8 +39,10 @@ public class Battle extends HttpServlet {
         System.out.println(session.getAttribute("s_len") + " , " + session.getAttribute("s_wid"));
 
         // うごいてるかわからん
+        createRand.createComCoords();
         session.setAttribute("c_len", createRand.getComLen());
         session.setAttribute("c_wid", createRand.getComWid());
+        System.out.println(session.getAttribute("c_len") + " : " + session.getAttribute("c_wid"));
 
         // html出力
         makeHtml(resp, session);
