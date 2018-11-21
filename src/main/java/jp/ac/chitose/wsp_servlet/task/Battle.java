@@ -1,5 +1,6 @@
 package jp.ac.chitose.wsp_servlet.task;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,10 +17,16 @@ public class Battle extends HttpServlet {
 
     private static ArrayList<String> resultArray;
     private CreateRand createRand = new CreateRand();
+    private String p_att_coords;    // Playerの攻撃座標
+    private String c_att_coords;    // CPUの攻撃座標
+    private Judge judge = new Judge();  // 攻撃判定用
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        // 突然の訪問は困るのでforwardする
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/register");
+        dispatcher.forward(req, resp);
     }
 
     @Override
@@ -29,25 +36,53 @@ public class Battle extends HttpServlet {
         HttpSession session = req.getSession();
 
         // RequestParamがnullでないときのみ実行(要は初回のみ)
-        if ( req.getParameter("bb_len")!=null && req.getParameter("bb_wid")!=null ) {
+        if ( req.getParameter("bb_len") != null && req.getParameter("bb_wid") != null ) {
+            // requestリソースから座標を取得
             String bb_len = req.getParameter("bb_len");
             String bb_wid = req.getParameter("bb_wid");
-            // 解決
+            // registerで入力した座標を設定
             session.setAttribute("s_len", bb_len);
             session.setAttribute("s_wid", bb_wid);
+            // CPUの座標設定
+            createRand.createComCoords();
+            session.setAttribute("c_len", createRand.getComLen());
+            session.setAttribute("c_wid", createRand.getComWid());
+            // CPUの全攻撃パターンをロード
+            createRand.allAttPatern();
         }
-        System.out.println(session.getAttribute("s_len") + " , " + session.getAttribute("s_wid"));
-
-        // うごいてるかわからん
-        createRand.createComCoords();
-        session.setAttribute("c_len", createRand.getComLen());
-        session.setAttribute("c_wid", createRand.getComWid());
+        // 自機：CPUの座標を表示
+        System.out.println(session.getAttribute("s_len") + " : " + session.getAttribute("s_wid"));
         System.out.println(session.getAttribute("c_len") + " : " + session.getAttribute("c_wid"));
 
+        // 攻撃座標が存在した場合に、CPUもランダムで攻撃
+        if( req.getParameter("att_len") != null && req.getParameter("att_wid") != null ) {
+            // 自分の攻撃座標
+            p_att_coords = req.getParameter("att_len") + req.getParameter("att_wid");
+            // CPUの攻撃座標を作成
+            c_att_coords = createRand.createAttCoords();   // ex -> 23, 44, 02 ...
+            // 攻撃の判定（自機->CPU、CPU->自機：ただし同時撃破はあり）
+            if( judge.playerJudge(p_att_coords) && judge.cpuJudge(c_att_coords) ) {
+                // 同時撃破
+                // Resultにforwardして終了
+            } else if ( judge.playerJudge(p_att_coords) ) {
+                // Player勝利
+                // Resultにforwardして終了
+            } else if( judge.cpuJudge(c_att_coords) ) {
+                // CPU勝利
+                // Resultにforwardして終了
+            } else {
+                // 続行(何もしない)
+            }
+            // 確認のため表示
+            System.out.println("Player-> " + p_att_coords + "\nComputer-> " + c_att_coords + "\n");
+        }
         // html出力
         makeHtml(resp, session);
     }
 
+    /*
+    * 攻撃座標の入力フォームを出力する
+    * */
     private void makeHtml(HttpServletResponse resp, HttpSession session)
             throws IOException {
 
@@ -66,6 +101,9 @@ public class Battle extends HttpServlet {
         }
     }
 
+    /*
+    * 自陣と敵陣のテーブル表示の出力
+    * */
     private void makeBattlefield(HttpServletResponse resp, HttpSession session)
             throws IOException {
         try(PrintWriter out = resp.getWriter() ) {
@@ -108,6 +146,8 @@ public class Battle extends HttpServlet {
                 out.println("</tr>");
             }
             out.println("</table><br>");
+
+            // 追加で、攻撃・撃破の履歴表示いれよっかな
             out.println("<p>-----------------------履歴-------------------------</p>");
 //            for(int i=0; i<resultArray.size(); i++) {
 //                //print
