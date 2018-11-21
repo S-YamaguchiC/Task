@@ -15,15 +15,16 @@ public class Register extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        // セッションの初期化
         HttpSession session = req.getSession();
         session.invalidate();
+        // フォームの表示
         makeHtml(resp, session);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        //
     }
 
     private void makeHtml(HttpServletResponse resp, HttpSession session)
