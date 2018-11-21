@@ -1,5 +1,6 @@
 package jp.ac.chitose.wsp_servlet.task;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -16,13 +17,13 @@ public class CreateRand {
     private int r_att_len, r_att_wid;
 
     // 攻撃座標の履歴用Array
-    private List<String> attResultArray;
+    private List<String> attResultArray = new ArrayList<>();
 
     // CPUの座標
     public String createComCoords() {
         // 座標のランダム出力(1~5), 縦横
-        r_len = random.nextInt(4);
-        r_wid = random.nextInt(4);
+        r_len = random.nextInt(5) + 1;
+        r_wid = random.nextInt(5) + 1;
         // ret (HTMLの<td>タグのidに相当)
         return String.valueOf(r_len + r_wid);
     }
@@ -30,8 +31,8 @@ public class CreateRand {
     // CPUの攻撃座標
     public String createAttCoords() {
         // 座標をランダム出力(1~5), 縦横
-        r_att_len = random.nextInt(4);
-        r_att_wid = random.nextInt(4);
+        r_att_len = random.nextInt(5) + 1;
+        r_att_wid = random.nextInt(5) + 1;
         // すべての攻撃パターンから、今出力した値を削除(remove)
         attResultArray.remove(r_att_len +  "," + r_att_wid);    // 1,2 or 0,4 or 3,2 etc...
         // ret (HTMLの<td>タグのidに相当)
