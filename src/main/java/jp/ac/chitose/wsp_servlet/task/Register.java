@@ -30,7 +30,7 @@ public class Register extends HttpServlet {
     private void makeHtml(HttpServletResponse resp, HttpSession session)
             throws IOException {
 
-        try(PrintWriter out = resp.getWriter() ) {
+        try(PrintWriter out = resp.getWriter()) {
             out.println("<!DOCTYPE html>");
             out.println("<html><head>");
             out.println("<meta charset=\"UTF-8\">");
