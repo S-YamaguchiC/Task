@@ -17,8 +17,6 @@ public class Battle extends HttpServlet {
 
     private static ArrayList<String> resultArray;
     private CreateRand createRand = new CreateRand();
-    private String p_att_coords;    // Playerの攻撃座標
-    private String c_att_coords;    // CPUの攻撃座標
     private Judge judge = new Judge();  // 攻撃判定用
 
     @Override
@@ -43,39 +41,22 @@ public class Battle extends HttpServlet {
             // registerで入力した座標を設定
             session.setAttribute("s_len", bb_len);
             session.setAttribute("s_wid", bb_wid);
+            judge.setPlayerCoords(bb_len + bb_wid);
             // CPUの座標設定
             createRand.createComCoords();
             session.setAttribute("c_len", createRand.getComLen());
             session.setAttribute("c_wid", createRand.getComWid());
+//            System.out.println((session.getAttribute("c_len")) + String.valueOf(session.getAttribute("c_wid")));
+            judge.setCpuCoords(String.valueOf(session.getAttribute("c_len")) + String.valueOf(session.getAttribute("c_wid")));
             // CPUの全攻撃パターンをロード
             createRand.allAttPatern();
         }
         // 自機：CPUの座標を表示
-        System.out.println(session.getAttribute("s_len") + " : " + session.getAttribute("s_wid"));
-        System.out.println(session.getAttribute("c_len") + " : " + session.getAttribute("c_wid"));
+//        System.out.println(session.getAttribute("s_len") + " : " + session.getAttribute("s_wid"));
+//        System.out.println(session.getAttribute("c_len") + " : " + session.getAttribute("c_wid"));
 
         // 攻撃座標が存在した場合に、CPUもランダムで攻撃
-        if( req.getParameter("att_len") != null && req.getParameter("att_wid") != null ) {
-            // 自分の攻撃座標
-            p_att_coords = req.getParameter("att_len") + req.getParameter("att_wid");
-            // CPUの攻撃座標を作成
-            c_att_coords = createRand.createAttCoords();   // ex -> 23, 44, 02 ...
-            // 攻撃の判定（自機->CPU、CPU->自機：ただし同時撃破はあり）
-            if( judge.playerJudge(p_att_coords) && judge.cpuJudge(c_att_coords) ) {
-                // 同時撃破
-                // Resultにforwardして終了
-            } else if ( judge.playerJudge(p_att_coords) ) {
-                // Player勝利
-                // Resultにforwardして終了
-            } else if( judge.cpuJudge(c_att_coords) ) {
-                // CPU勝利
-                // Resultにforwardして終了
-            } else {
-                // 続行(何もしない)
-            }
-            // 確認のため表示
-            System.out.println("Player-> " + p_att_coords + "\nComputer-> " + c_att_coords + "\n");
-        }
+        judge.judgeRsult(req, resp, session, createRand);
         // html出力
         makeHtml(resp, session);
     }
