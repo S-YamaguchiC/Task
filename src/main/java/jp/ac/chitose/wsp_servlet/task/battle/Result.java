@@ -1,15 +1,21 @@
-package jp.ac.chitose.wsp_servlet.task;
+package jp.ac.chitose.wsp_servlet.task.battle;
+
+import jp.ac.chitose.wsp_servlet.task.dao.HistoryDAO;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.html.HTMLDocument;
 import java.io.IOException;
 import java.io.PrintWriter;
 
 @WebServlet("/result")
 public class Result extends HttpServlet {
+
+    private HistoryDAO historyDAO = new HistoryDAO();
+    private int i=1;
 
     //いつもの
     @Override
@@ -25,6 +31,10 @@ public class Result extends HttpServlet {
             out.println("</head><body>");
             out.println("<p>試合終了～" + session.getAttribute("winner") + "</p>");
             out.println("<a href=\"././register\">トップに戻る</a>");
+            out.println("<p>----------過去の対戦履歴----------</p>");
+            for (String result : historyDAO.selectGameResults()) {
+                System.out.println(i + ". : " + result);
+            }
             out.println("</body></html>");
         }
     }

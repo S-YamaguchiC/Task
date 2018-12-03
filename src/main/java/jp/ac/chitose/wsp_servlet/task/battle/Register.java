@@ -1,4 +1,4 @@
-package jp.ac.chitose.wsp_servlet.task;
+package jp.ac.chitose.wsp_servlet.task.battle;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

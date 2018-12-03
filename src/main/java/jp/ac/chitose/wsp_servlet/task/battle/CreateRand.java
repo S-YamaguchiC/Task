@@ -1,4 +1,7 @@
-package jp.ac.chitose.wsp_servlet.task;
+package jp.ac.chitose.wsp_servlet.task.battle;
+
+import jp.ac.chitose.wsp_servlet.task.dao.HistoryDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +15,7 @@ public class CreateRand {
 
     // Random
     Random random = new Random();
+    HistoryDAO historyDAO = new HistoryDAO();
     // CPU's Coordinate
     private int r_len, r_wid;
     // Atk Coordinate
@@ -38,7 +42,7 @@ public class CreateRand {
             // 0 ~ 5-1
             r_att_len = random.nextInt(5);
             r_att_wid = random.nextInt(5);
-            if ( attResultArray.get(r_att_len + r_att_wid).isEmpty() ) {
+            if ( attResultArray.get(r_att_len + r_att_wid).equals("") ) {
                 // なにもしない、ループs
             } else {
                 break;
@@ -55,6 +59,7 @@ public class CreateRand {
         // 1,2 or 0,4 or 3,2 etc...
         // ret (HTMLの<td>タグのidに相当)
 //        System.out.println("Computer ->" + r_att_len + ", " + r_att_wid + "\n");
+        historyDAO.insertComputerHistory(val);
         return String.valueOf(r_att_len+1) + String.valueOf(r_att_wid+1);
     }
 

@@ -1,4 +1,7 @@
-package jp.ac.chitose.wsp_servlet.task;
+package jp.ac.chitose.wsp_servlet.task.battle;
+
+import com.sun.xml.internal.ws.api.ha.StickyFeature;
+import jp.ac.chitose.wsp_servlet.task.dao.HistoryDAO;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,15 +12,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/battle")
 public class Battle extends HttpServlet {
 
-    private static ArrayList<String> resultArray;
     private CreateRand createRand = new CreateRand();
     private Judge judge = new Judge();  // 攻撃判定用
+    private HistoryDAO historyDAO = new HistoryDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -41,7 +44,9 @@ public class Battle extends HttpServlet {
             // registerで入力した座標を設定
             session.setAttribute("s_len", bb_len);
             session.setAttribute("s_wid", bb_wid);
-            judge.setPlayerCoords(bb_len + bb_wid);
+            judge.setPlayerCoords( (String)session.getAttribute("s_len") + session.getAttribute("s_wid"));
+            //
+            historyDAO.insertPlayerHistory(session.getAttribute("s_len") + "," + session.getAttribute("s_wid"));
             // CPUの座標設定
             createRand.createComCoords();
             session.setAttribute("c_len", createRand.getComLen());
