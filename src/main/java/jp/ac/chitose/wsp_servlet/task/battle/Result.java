@@ -33,7 +33,8 @@ public class Result extends HttpServlet {
             out.println("<a href=\"././register\">トップに戻る</a>");
             out.println("<p>----------過去の対戦履歴----------</p>");
             for (String result : historyDAO.selectGameResults()) {
-                System.out.println(i + ". : " + result);
+                out.println(i + ". " + result + "<br>");
+                i++;
             }
             out.println("</body></html>");
         }
