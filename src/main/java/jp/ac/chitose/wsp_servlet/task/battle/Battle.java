@@ -61,7 +61,7 @@ public class Battle extends HttpServlet {
 //        System.out.println(session.getAttribute("c_len") + " : " + session.getAttribute("c_wid"));
 
         // 攻撃座標が存在した場合に、CPUもランダムで攻撃
-        judge.judgeRsult(req, resp, session, createRand);
+        judge.judgeResult(req, resp, session, createRand);
         // html出力
         makeHtml(resp, session);
     }

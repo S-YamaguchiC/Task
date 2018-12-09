@@ -64,7 +64,7 @@ public class Judge {
     /*
     *
     * */
-    public void judgeRsult(HttpServletRequest req, HttpServletResponse resp, HttpSession session, CreateRand createRand)
+    public void judgeResult(HttpServletRequest req, HttpServletResponse resp, HttpSession session, CreateRand createRand)
             throws ServletException, IOException {
 
         if( req.getParameter("att_len") != null && req.getParameter("att_wid") != null ) {
@@ -104,4 +104,6 @@ public class Judge {
 //            System.out.println("Player-> " + p_att_coords + "\nComputer-> " + c_att_coords + "\n");
         }
     }
+
+    private void
 }
