@@ -79,8 +79,8 @@ public class Battle extends HttpServlet {
             out.println("</head><body>");
             out.println("<p>お互いの準備ができました、攻撃開始</p>");
             out.println("<form action=\"./battle\" method=\"POST\">");
-            out.println("攻撃座標（縦）：<input type=\"text\" name=\"att_len\"><br>");
-            out.println("攻撃座標（横）：<input type=\"text\" name=\"att_wid\"><br>");
+            out.println("攻撃座標（縦）：<input type=\"number\" name=\"att_len\" placeholder=\"縦座標\" min=\"1\" max=\"5\" required><br>");
+            out.println("攻撃座標（横）：<input type=\"number\" name=\"att_wid\" placeholder=\"横座標\" min=\"1\" max=\"5\" required><br>");
             out.println("<input type=\"submit\" value=\"攻撃\">");
             out.println("</form>");
             makeBattlefield(resp, session);
