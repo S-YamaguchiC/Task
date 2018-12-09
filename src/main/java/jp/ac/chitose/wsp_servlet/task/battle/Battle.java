@@ -45,8 +45,6 @@ public class Battle extends HttpServlet {
             session.setAttribute("s_len", bb_len);
             session.setAttribute("s_wid", bb_wid);
             judge.setPlayerCoords( (String)session.getAttribute("s_len") + session.getAttribute("s_wid"));
-            //
-            historyDAO.insertPlayerHistory(session.getAttribute("s_len") + "," + session.getAttribute("s_wid"));
             // CPUの座標設定
             createRand.createComCoords();
             session.setAttribute("c_len", createRand.getComLen());
@@ -55,6 +53,9 @@ public class Battle extends HttpServlet {
             judge.setCpuCoords(String.valueOf(session.getAttribute("c_len")) + String.valueOf(session.getAttribute("c_wid")));
             // CPUの全攻撃パターンをロード
             createRand.allAttPatern();
+        } else {
+            // next
+            historyDAO.insertPlayerHistory(req.getParameter("att_len") + "," + req.getParameter("att_wid"));
         }
         // 自機：CPUの座標を表示
 //        System.out.println(session.getAttribute("s_len") + " : " + session.getAttribute("s_wid"));
@@ -136,10 +137,13 @@ public class Battle extends HttpServlet {
             out.println("<a href=\"./register\">対戦の中断</a>");
             // 追加で、攻撃・撃破の履歴表示いれよっかな
             out.println("<p>-----------------------履歴-------------------------</p>");
-//            for(int i=0; i<resultArray.size(); i++) {
-//                //print
-//                out.println("<p>座標：" + resultArray.get(i) + "</p>");
-//            }
+            int i=1;
+            out.println("<p>Player----------------------------------------------</p>");
+            for (String player : historyDAO.selectPlayerAttackHistory()) {
+                out.println(i + ". " + player + "<br>");
+                i++;
+            }
+            out.println("<p>Computer--------------------------------------------</p>");
             out.println("</body></html>");
         }
     }
