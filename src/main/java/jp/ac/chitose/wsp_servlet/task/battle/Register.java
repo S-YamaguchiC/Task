@@ -37,8 +37,8 @@ public class Register extends HttpServlet {
             out.println("</head><body>");
             out.println("<p>戦艦の位置を設定</p>");
             out.println("<form action=\"./battle\" method=\"POST\">");
-            out.println("<p>縦(1~5)<input type=\"text\" name=\"bb_len\" placeholder=\"縦座標\"></p>");
-            out.println("<p>横(1~5)<input type=\"text\" name=\"bb_wid\" placeholder=\"横座標\"></p>");
+            out.println("<p>縦(1~5)<input type=\"number\" name=\"bb_len\" placeholder=\"縦座標\" min=\"1\" max=\"5\" required></p>");
+            out.println("<p>横(1~5)<input type=\"number\" name=\"bb_wid\" placeholder=\"横座標\" min=\"1\" max=\"5\" required></p>");
             out.println("<input type=\"submit\" value=\"設定\">");
             out.println("</form>");
             out.println("</body></html>");
