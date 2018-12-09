@@ -1,6 +1,5 @@
 package jp.ac.chitose.wsp_servlet.task.battle;
 
-import com.sun.xml.internal.ws.api.ha.StickyFeature;
 import jp.ac.chitose.wsp_servlet.task.dao.HistoryDAO;
 
 import javax.servlet.RequestDispatcher;
@@ -12,8 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet("/battle")
 public class Battle extends HttpServlet {
@@ -144,6 +141,11 @@ public class Battle extends HttpServlet {
                 i++;
             }
             out.println("<p>Computer--------------------------------------------</p>");
+            int j=1;
+            for (String player : historyDAO.selectComputerAttackHistory()) {
+                out.println(j + ". " + player + "<br>");
+                j++;
+            }
             out.println("</body></html>");
         }
     }
