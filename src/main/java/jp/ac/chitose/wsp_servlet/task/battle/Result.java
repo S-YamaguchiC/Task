@@ -15,7 +15,6 @@ import java.io.PrintWriter;
 public class Result extends HttpServlet {
 
     private HistoryDAO historyDAO = new HistoryDAO();
-    private int i=1;
 
     //いつもの
     @Override
@@ -32,6 +31,7 @@ public class Result extends HttpServlet {
             out.println("<p>試合終了～" + session.getAttribute("winner") + "</p>");
             out.println("<a href=\"././register\">トップに戻る</a>");
             out.println("<p>----------過去の対戦履歴----------</p>");
+            int i = 1;
             for (String result : historyDAO.selectGameResults()) {
                 out.println(i + ". " + result + "<br>");
                 i++;
