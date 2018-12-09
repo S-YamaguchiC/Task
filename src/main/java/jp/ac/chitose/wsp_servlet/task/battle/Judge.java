@@ -79,23 +79,20 @@ public class Judge {
                 // 同時撃破
                 // Resultにforwardして終了
                 session.setAttribute("winner", DRAW);
-                historyDAO.insertGameResult(DRAW);
                 System.out.println("おわり：PE");
-                result.doGet(req, resp);
+                resultFunc(DRAW, req, resp);
             } else if ( playerJudge(p_att_coords) ) {
                 // Player勝利
                 // Resultにforwardして終了
                 session.setAttribute("winner", P_WIN);
-                historyDAO.insertGameResult(P_WIN);
                 System.out.println("おわり：P");
-                result.doGet(req, resp);
+                resultFunc(P_WIN, req, resp);
             } else if( cpuJudge(c_att_coords) ) {
                 // CPU勝利
                 // Resultにforwardして終了
                 session.setAttribute("winner", C_WIN);
-                historyDAO.insertGameResult(C_WIN);
                 System.out.println("おわり：E");
-                result.doGet(req, resp);
+                resultFunc(C_WIN, req, resp);
             } else {
                 // 攻撃座標を保存して続行
                 //
@@ -105,5 +102,11 @@ public class Judge {
         }
     }
 
-    private void
+    private void resultFunc(String pattern, HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+        //
+        historyDAO.insertGameResult(pattern);
+        //
+        result.doGet(req, resp);
+    }
 }
