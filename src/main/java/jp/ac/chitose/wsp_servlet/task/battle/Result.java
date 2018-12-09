@@ -38,5 +38,6 @@ public class Result extends HttpServlet {
             }
             out.println("</body></html>");
         }
+        historyDAO.deleteAttackHistory();
     }
 }
