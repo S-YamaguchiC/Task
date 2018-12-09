@@ -133,13 +133,13 @@ public class Battle extends HttpServlet {
             }
             out.println("</table><br>");
 
+            out.println("<a href=\"./register\">対戦の中断</a>");
             // 追加で、攻撃・撃破の履歴表示いれよっかな
             out.println("<p>-----------------------履歴-------------------------</p>");
 //            for(int i=0; i<resultArray.size(); i++) {
 //                //print
 //                out.println("<p>座標：" + resultArray.get(i) + "</p>");
 //            }
-            out.println("<a href=\"./register\">対戦の中断</a>");
             out.println("</body></html>");
         }
     }
