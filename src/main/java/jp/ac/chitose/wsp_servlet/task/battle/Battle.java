@@ -94,7 +94,7 @@ public class Battle extends HttpServlet {
             out.println("<h5>あなたの陣地</h5>");
             out.println("<table border=\"3\"><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>");
             String BB = "W";
-            String CPU = "C";
+            String CPU = "　";
             for (int i=0; i<5; i++) {
                 out.println("<tr>");
                 out.println("<th>"+ (i+1) +"</th>");
@@ -103,6 +103,9 @@ public class Battle extends HttpServlet {
                     if (session.getAttribute("s_len").equals(String.valueOf(i+1))
                             && session.getAttribute("s_wid").equals(String.valueOf(j+1))) {
                         out.println("<td id="+ String.valueOf(i)+String.valueOf(j) + " align='right' width='20'>" + BB + "</td>");
+                    } else if (historyDAO.selectComputerMissShot(String.valueOf(i+1)+","+String.valueOf(j+1)) == 1) {
+                        // 攻撃をスカしたところを「・」に変更
+                        out.println("<td id=" + String.valueOf(i) + String.valueOf(j) + " align='right' width='20'>" + "・" + "</td>");
                     } else {
                         // CPUから攻撃されたときinnerHTMLで変更できるように空文字
                         out.println("<td id="+ String.valueOf(i)+String.valueOf(j) + " align='right' width='20'>" + " " + "</td>");
@@ -122,6 +125,9 @@ public class Battle extends HttpServlet {
                     if(session.getAttribute("c_len").equals(String.valueOf(i+1))
                             && session.getAttribute("c_wid").equals(String.valueOf(j+1))) {
                         out.println("<td id=" + String.valueOf(i) + String.valueOf(j) + " align='right' width='20'>" + CPU + "</td>");
+                    } else if (historyDAO.selectPlayerMissShot(String.valueOf(i+1)+","+String.valueOf(j+1)) == 1) {
+                        // 攻撃をスカしたところを「・」に変更
+                        out.println("<td id=" + String.valueOf(i) + String.valueOf(j) + " align='right' width='20'>" + "・" + "</td>");
                     } else {
                         out.println("<td id=" + String.valueOf(i) + String.valueOf(j) + " align='right' width='20'>" + " " + "</td>");
                     }
