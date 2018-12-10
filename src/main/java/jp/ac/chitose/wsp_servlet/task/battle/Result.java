@@ -14,7 +14,7 @@ import java.io.PrintWriter;
 @WebServlet("/result")
 public class Result extends HttpServlet {
 
-    private HistoryDAO historyDAO = new HistoryDAO();
+    HistoryDAO historyDAO = new HistoryDAO();
 
     //いつもの
     @Override
@@ -36,6 +36,7 @@ public class Result extends HttpServlet {
                 out.println(i + ". " + result + "<br>");
                 i++;
             }
+            out.println("<p>----------勝率 : "+ historyDAO.countWin() +"%-----------</p>");
             out.println("</body></html>");
         }
         historyDAO.deleteAttackHistory();
