@@ -1,5 +1,6 @@
 package jp.ac.chitose.wsp_servlet.task.dao;
 
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -118,6 +119,33 @@ public class HistoryDAO implements IHistoryDAO {
     }
 
     @Override
+    public double countWin() {
+
+        double win = 0, all = 0;
+        String sql1 = "select RESULT from RESULTS WHERE RESULT = ?";
+        String sql2 = "select RESULT from RESULTS";
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWD)){
+            try (PreparedStatement ppst = connection.prepareStatement(sql1)){
+                ppst.setString(1, "Playerの勝利");
+                ResultSet rs = ppst.executeQuery();
+                while (rs.next()) {
+                    win++;
+                }
+            }
+            try (PreparedStatement ppst = connection.prepareStatement(sql2)){
+                ResultSet rs = ppst.executeQuery();
+                while (rs.next()) {
+                    all++;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println( (win/all) * 100);
+        return (win/all) * 100;
+    }
+
+    @Override
     public void deleteAttackHistory() {
 
         String sql1 = "delete from PLAYERHISTORY";
@@ -134,5 +162,43 @@ public class HistoryDAO implements IHistoryDAO {
         }
     }
 
+    @Override
+    public long selectPlayerMissShot(String coordinate) {
 
+        long ret = 0;
+        String sql = "select P_HISTORY from PLAYERHISTORY where P_HISTORY = ?";
+        //noinspection Duplicates
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWD)){
+            try (PreparedStatement ppst = connection.prepareStatement(sql)){
+                ppst.setString(1, coordinate);
+                ResultSet rs = ppst.executeQuery();
+                if (rs.next()) {
+                    ret = 1;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
+    @Override
+    public long selectComputerMissShot(String coordinate) {
+
+        long ret = 0;
+        String sql = "select C_HISTORY from COMPUTERHISTORY where C_HISTORY = ?";
+        //noinspection Duplicates
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWD)){
+            try (PreparedStatement ppst = connection.prepareStatement(sql)){
+                ppst.setString(1, coordinate);
+                ResultSet rs = ppst.executeQuery();
+                if (rs.next()) {
+                    ret = 1;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
 }

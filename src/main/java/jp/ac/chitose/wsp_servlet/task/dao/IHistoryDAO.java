@@ -41,7 +41,22 @@ public interface IHistoryDAO {
     List<String> selectGameResults();
 
     /**
+     * 試合に勝った回数を取得
+     * */
+    double countWin();
+
+    /**
      * 試合終了時に攻撃座標テーブルのレコードをすべて削除
      * */
     void deleteAttackHistory();
+
+    /**
+     * 攻撃をスカしたとき「・」を表示するためのSQL
+     * */
+    long selectPlayerMissShot(String coordinate);
+
+    /**
+     * 同上
+     * */
+    long selectComputerMissShot(String coordinate);
 }
