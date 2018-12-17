@@ -103,7 +103,7 @@ public class Judge {
     }
 
     private void resultFunc(String pattern, HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
+            throws IOException, ServletException {
         //
         historyDAO.insertGameResult(pattern);
         //

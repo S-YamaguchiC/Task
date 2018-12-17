@@ -2,6 +2,8 @@ package jp.ac.chitose.wsp_servlet.task.battle;
 
 import jp.ac.chitose.wsp_servlet.task.dao.HistoryDAO;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import javax.swing.text.html.HTMLDocument;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Objects;
 
 @WebServlet("/result")
 public class Result extends HttpServlet {
@@ -19,9 +22,15 @@ public class Result extends HttpServlet {
     //いつもの
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
+            throws IOException, ServletException {
 
         HttpSession session = req.getSession();
+
+        // 直でこのページを開くとおこられる
+        if(Objects.isNull(session.getAttribute("winner"))) {
+            RequestDispatcher dispatcher = req.getRequestDispatcher("./error");
+            dispatcher.forward(req, resp);
+        }
 
         try(PrintWriter out = resp.getWriter() ) {
             out.println("<!DOCTYPE html>");
